@@ -6,7 +6,7 @@ import (
 )
 
 func TestGetAppPath(t *testing.T) {
-	path, err := GetAppPath()
+	path, err := getAppPath()
 	if err != nil {
 		t.Error(err)
 	}
@@ -16,20 +16,14 @@ func TestGetAppPath(t *testing.T) {
 }
 
 func TestGetAppName(t *testing.T) {
-	name, err := GetAppName()
-	if err != nil {
-		t.Error(err)
-	}
+	name := GetAppName()
 	if name != "helpers" {
 		t.Errorf("expected helpers, got %s", name)
 	}
 }
 
 func TestGetAppEnvName(t *testing.T) {
-	name, err := GetAppEnvName()
-	if err != nil {
-		t.Error(err)
-	}
+	name := GetAppEnvName()
 	if name != "HELPERS" {
 		t.Errorf("expected HELPERS, got %s", name)
 	}

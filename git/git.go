@@ -2,16 +2,28 @@ package git
 
 import (
 	"bytes"
+	"fmt"
 	"os/exec"
 	"strings"
 
 	"github.com/pkg/errors"
 )
 
+// global set by init
+var appPath string
+
+func init() {
+	var err error
+	appPath, err = getAppPath()
+	if err != nil {
+		panic(fmt.Sprintf("git rev-parse command from git helpers failed, is this an active repo?: %s", err))
+	}
+}
+
 // GetAppPath executes the git cmd "git rev-parse --show-toplevel" to obtain
 // the full path of the current app. The last folder in the path is the app name.
-func GetAppPath() (string, error) {
-	return getAppPath()
+func GetAppPath() string {
+	return appPath
 }
 
 func getAppPath() (string, error) {
@@ -36,26 +48,16 @@ func getAppPath() (string, error) {
 
 // GetAppName executes the git cmd "git rev-parse --show-toplevel" to obtain
 // the app name of the current app. The last folder in the path is the app name.
-func GetAppName() (string, error) {
-	path, err := getAppPath()
-	if err != nil {
-		return "", err
-	}
-
-	return getAppName(path), err
+func GetAppName() string {
+	return getAppName(appPath)
 }
 
 // GetAppEnvName executes the git cmd "git rev-parse --show-toplevel" to obtain
 // the app name of the current app in environment mode format.
 // The last folder in the path is the app name.
 // For example, "my-app" converts to "MY_APP".
-func GetAppEnvName() (string, error) {
-	path, err := getAppPath()
-	if err != nil {
-		return "", err
-	}
-
-	return strings.ToUpper(replaceNonAlpha(getAppName(path), '_')), nil
+func GetAppEnvName() string {
+	return strings.ToUpper(replaceNonAlpha(getAppName(appPath), '_'))
 }
 
 // getAppName gets the appname portion of a project path
