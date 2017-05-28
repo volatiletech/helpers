@@ -2,7 +2,6 @@ package git
 
 import (
 	"bytes"
-	"fmt"
 	"os/exec"
 	"strings"
 
@@ -13,11 +12,7 @@ import (
 var appPath string
 
 func init() {
-	var err error
-	appPath, err = getAppPath()
-	if err != nil {
-		panic(fmt.Sprintf("git rev-parse command from git helpers failed, is this an active repo?: %s", err))
-	}
+	appPath, _ = getAppPath()
 }
 
 // GetAppPath executes the git cmd "git rev-parse --show-toplevel" to obtain
